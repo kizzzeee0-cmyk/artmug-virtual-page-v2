@@ -44,14 +44,14 @@ function renderSite(c){
 function renderNotices(list){return `<section class="section">${sectionHead('NOTICE','안내 및 유의사항','필요한 항목을 눌러 자세한 내용을 확인해주세요.')}<div class="accordion-list">${list.map((n,i)=>`<details class="notice card" ${i===0?'open':''}><summary>${esc(n.title)}</summary><div class="notice-body"><ul>${(n.items||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>`).join('')||'<div class="empty">등록된 안내사항이 없습니다.</div>'}</div></section>`}
 function renderWorkflow(list){return `<section class="section">${sectionHead('PROCESS','작업 진행 순서')}<div class="workflow">${list.map((x,i)=>`<article class="workflow-item card"><div class="workflow-num">${i+1}</div><h3>${esc(x.title)}</h3>${x.description?`<p>${esc(x.description)}</p>`:''}</article>`).join('')||'<div class="empty">등록된 작업 순서가 없습니다.</div>'}</div></section>`}
 function renderAvatars(list){
-  return `<section class="section">${sectionHead('AVATAR LIST','보유 아바타 목록','아바타별 사진을 한 화면에서 모두 확인할 수 있습니다.')}<div class="avatar-all-list">${list.map(a=>avatarGroup(a)).join('')||'<div class="empty">등록된 아바타가 없습니다.</div>'}</div></section>`
+  return `<section class="section">${sectionHead('AVATAR LIST','보유 아바타 목록','카테고리 이름과 사진을 한 화면에서 가로형으로 정리해 확인할 수 있습니다.')}<div class="avatar-board">${list.map(a=>avatarGroup(a)).join('')||'<div class="empty">등록된 아바타가 없습니다.</div>'}</div></section>`
 }
 function avatarGroup(a){
   const images=(a.images||[]).filter(Boolean);
-  return `<div class="avatar-group"><div class="avatar-group-head"><span class="avatar-category">${esc(a.name||'아바타')}</span><span class="avatar-count">${images.length}장</span></div><div class="avatar-gallery">${images.map((u,i)=>`<div class="avatar-thumb">${img(u,`${a.name} ${i+1}`,'avatar-thumb-img')}</div>`).join('')||'<div class="avatar-empty">등록된 사진이 없습니다.</div>'}</div></div>`;
+  return `<div class="avatar-group"><div class="avatar-category">${esc(a.name||'아바타')}</div><div class="avatar-photo-line">${images.map((u,i)=>`<div class="avatar-thumb">${img(u,`${a.name} ${i+1}`,'avatar-thumb-img')}</div>`).join('')||'<div class="avatar-empty">등록된 사진이 없습니다.</div>'}</div></div>`;
 }
 function renderPremades(list){return `<section class="section">${sectionHead('READY-MADE','현재 판매중인 개인작','빠르게 아바타를 받고 싶은 분들을 위한 1인 한정 개인작입니다.')}<div class="premade-grid">${list.map(p=>`<article class="premade-card card"><div class="premade-top"><div class="premade-media">${img(p.faceImage,`${p.name} 얼굴`)}</div><div class="premade-media">${img(p.motionGif,`${p.name} 움직임`)}</div></div><div class="premade-meta"><div class="premade-name-row"><div><h3 class="premade-name">${esc(p.name)}</h3><div class="premade-base">${esc(p.baseModel||'')}</div></div><div class="price">${esc(p.price||'')}</div></div><p class="premade-desc">${esc(p.description||'')}</p><div class="chips">${(p.included||[]).map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div></div></article>`).join('')||'<div class="empty">현재 판매중인 개인작이 없습니다.</div>'}</div></section>`}
-function renderPortfolio(list){const first=list[0];return `<section class="section">${sectionHead('PORTFOLIO','포트폴리오','카테고리를 선택하고 좌우로 넘겨 더 많은 작업물을 확인할 수 있습니다.')}<div class="tabs" data-tabs="portfolio">${list.map((a,i)=>`<button class="tab-btn ${i===0?'active':''}" data-tab="${i}">${esc(a.name)}</button>`).join('')}</div><div id="portfolioPanel" class="portfolio-wrap">${first?portfolioPanel(first):'<div class="empty">등록된 포트폴리오가 없습니다.</div>'}</div></section>`}
+function renderPortfolio(list){const first=list[0];return `<section class="section">${sectionHead('PORTFOLIO','포트폴리오','카테고리를 선택한 뒤 아래 슬라이드 바를 움직여 더 많은 작업물을 확인할 수 있습니다.')}<div class="tabs" data-tabs="portfolio">${list.map((a,i)=>`<button class="tab-btn ${i===0?'active':''}" data-tab="${i}">${esc(a.name)}</button>`).join('')}</div><div id="portfolioPanel" class="portfolio-wrap">${first?portfolioPanel(first):'<div class="empty">등록된 포트폴리오가 없습니다.</div>'}</div></section>`}
 function newestPortfolioItems(cat){
   return (cat.items||[]).map((item,index)=>({item,index,stamp:Number(item.updatedAt||item.createdAt||0)})).sort((a,b)=>{
     if(a.stamp||b.stamp){if(a.stamp!==b.stamp)return b.stamp-a.stamp;}
@@ -65,7 +65,7 @@ function portfolioPanel(cat){
   const cards=cat.layout==='compare'
     ? items.map((it,i)=>`<article class="portfolio-item compare-card"><div class="compare-pair"><div class="compare-media"><span class="compare-label">BEFORE</span>${img(it.before,`${cat.name} before ${i+1}`,'portfolio-zoom')}</div><div class="compare-media"><span class="compare-label">AFTER</span>${img(it.after,`${cat.name} after ${i+1}`,'portfolio-zoom')}</div></div>${it.caption?`<div class="portfolio-caption">${esc(it.caption)}</div>`:''}</article>`).join('')
     : items.map((it,i)=>`<article class="portfolio-item"><div class="portfolio-media ${kind==='wide'?'portfolio-media-wide':''}" style="aspect-ratio:${esc(cat.ratio||(kind==='wide'?'16 / 9':'1 / 1'))}">${img(it.media,`${cat.name} ${i+1}`,'portfolio-zoom')}</div>${it.caption?`<div class="portfolio-caption">${esc(it.caption)}</div>`:''}</article>`).join('');
-  return `<div class="portfolio-slider-shell"><div class="portfolio-slider-controls"><button type="button" class="slider-btn" data-slide="prev" aria-label="이전 포트폴리오">‹</button><button type="button" class="slider-btn" data-slide="next" aria-label="다음 포트폴리오">›</button></div><div class="portfolio-slider portfolio-slider--${kind}" data-portfolio-rail>${cards}</div></div>`;
+  return `<div class="portfolio-slider-shell"><div class="portfolio-slider portfolio-slider--${kind}" data-portfolio-rail>${cards}</div><div class="portfolio-range-wrap"><input class="portfolio-range" data-portfolio-range type="range" min="0" max="0" value="0" step="1" aria-label="포트폴리오 좌우 이동"></div></div>`;
 }
 function renderCollaborators(c){if(!c.enabled)return'';const list=c.items||[];return `<section class="section">${sectionHead('COLLABORATION','협업 작가')}<div class="collab-grid">${list.map(x=>`<article class="collab-card card">${x.image?`<div class="collab-media"><img src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy" decoding="async" data-zoom="true" tabindex="0" role="button"></div>`:'<div class="media-placeholder collab-media"></div>'}<div><h3>${esc(x.name)}</h3><p>${esc(x.description||'')}</p>${x.url?`<a class="link-btn" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">작가 페이지 바로가기</a>`:''}</div><div class="collab-price">${esc(x.price||'')}</div></article>`).join('')||'<div class="empty">등록된 협업 작가가 없습니다.</div>'}</div></section>`}
 function renderInquiry(q){
@@ -77,13 +77,33 @@ function bindTabs(){
 }
 function bindPortfolioSlider(){
   document.querySelectorAll('.portfolio-slider-shell').forEach(shell=>{
-    const rail=shell.querySelector('[data-portfolio-rail]'); if(!rail)return;
-    const controls=shell.querySelector('.portfolio-slider-controls'); if(controls)controls.hidden=rail.children.length<2;
-    shell.querySelectorAll('[data-slide]').forEach(btn=>btn.onclick=()=>{
-      const card=rail.querySelector('.portfolio-item');
-      const step=(card?.getBoundingClientRect().width||280)+12;
-      rail.scrollBy({left:btn.dataset.slide==='next'?step:-step,behavior:'smooth'});
+    const rail=shell.querySelector('[data-portfolio-rail]');
+    const range=shell.querySelector('[data-portfolio-range]');
+    if(!rail||!range)return;
+    let syncing=false;
+    const updateRange=()=>{
+      const max=Math.max(0,Math.round(rail.scrollWidth-rail.clientWidth));
+      range.max=String(max);
+      range.value=String(Math.min(max,Math.round(rail.scrollLeft)));
+      range.parentElement.hidden=max<=1;
+    };
+    range.addEventListener('input',()=>{
+      syncing=true;
+      rail.scrollLeft=Number(range.value)||0;
+      requestAnimationFrame(()=>{syncing=false;});
     });
+    rail.addEventListener('scroll',()=>{
+      if(syncing)return;
+      range.value=String(Math.round(rail.scrollLeft));
+    },{passive:true});
+    if('ResizeObserver' in window){
+      const ro=new ResizeObserver(updateRange);
+      ro.observe(rail);
+      Array.from(rail.children).forEach(el=>ro.observe(el));
+    }else{
+      window.addEventListener('resize',updateRange,{passive:true});
+    }
+    requestAnimationFrame(updateRange);
   });
 }
 function bindLightbox(){
