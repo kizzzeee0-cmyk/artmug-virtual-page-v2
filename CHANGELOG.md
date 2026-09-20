@@ -1,3 +1,8 @@
+## v2.2
+- Fix artist intro description rendering so single-line text no longer appears as many forced lines on desktop.
+- Normalize whitespace in artist description to collapse accidental newlines into spaces.
+- Improve artist profile layout with more stable flex column and max text width.
+
 # v2.1 변경사항
 
 - PC 상단 작가 소개 문구가 120px 프로필 사진 열에 잘못 배치되어 여러 줄로 쪼개지던 레이아웃 버그 수정

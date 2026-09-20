@@ -1,6 +1,7 @@
 const $ = (s, root=document) => root.querySelector(s);
 const esc = (v='') => String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const toast = (msg) => { const el=$('#toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(window.__toast); window.__toast=setTimeout(()=>el.classList.remove('show'),2200); };
+const inlineText = (v='') => esc(String(v).replace(/\s+/g,' ').trim());
 let content;
 
 async function loadContent(){
@@ -26,7 +27,7 @@ function renderSite(c){
   app.innerHTML=`
     <section class="artist-card card">
       ${s.profileImage ? `<img class="artist-photo" src="${esc(s.profileImage)}" alt="${esc(s.artistName||'작가')} 프로필">` : `<div class="artist-photo placeholder">✦</div>`}
-      <div class="artist-copy"><div class="eyebrow">ARTIST PROFILE</div><h1 class="artist-name">${esc(s.artistName||'작가명')}</h1><p class="artist-subtitle">${esc(s.subtitle||'')}</p><p class="artist-programs">${esc(s.programs||'')}</p><p class="artist-description">${esc(s.description||'')}</p></div>
+      <div class="artist-copy"><div class="eyebrow">ARTIST PROFILE</div><h1 class="artist-name">${esc(s.artistName||'작가명')}</h1><p class="artist-subtitle">${esc(s.subtitle||'')}</p><p class="artist-programs">${esc(s.programs||'')}</p><p class="artist-description">${inlineText(s.description||'')}</p></div>
     </section>
     <section class="schedule-card card"><div class="schedule-icon">↗</div><div><strong>작업 일정 안내</strong><p>${esc(s.scheduleText||'')}</p></div></section>
     ${renderNotices(c.notices||[])}
