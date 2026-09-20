@@ -1,3 +1,10 @@
+## v2.5
+- Avatar list now renders as one dense continuous photo wall with no category-name labels or count labels.
+- Avatar thumbnails wrap automatically to the next row with minimal spacing.
+- Portfolio bottom scrubber thumb now scales to the visible/content ratio: longer for a few items, shorter for many.
+- Collaboration cards and images are larger while retaining uploaded image aspect ratio.
+- When 3+ premade items exist, the section switches to top tabs and shows one selected item at a time.
+
 ## v2.4
 - 협업 작가 이미지를 고정 높이 박스에 넣지 않고 업로드 원본 비율대로 높이가 늘어나도록 변경했습니다.
 - 포트폴리오 좌우 화살표를 제거하고 아래 드래그 가능한 슬라이드 바로 변경했습니다.

@@ -38,19 +38,26 @@ function renderSite(c){
     ${renderCollaborators(c.collaborators||{})}
     ${renderInquiry(c.inquiry||{})}
   `;
-  bindTabs(); bindPortfolioSlider(); bindLightbox(); bindInquiry();
+  bindTabs(); bindPremadeTabs(); bindPortfolioSlider(); bindLightbox(); bindInquiry();
 }
 
 function renderNotices(list){return `<section class="section">${sectionHead('NOTICE','안내 및 유의사항','필요한 항목을 눌러 자세한 내용을 확인해주세요.')}<div class="accordion-list">${list.map((n,i)=>`<details class="notice card" ${i===0?'open':''}><summary>${esc(n.title)}</summary><div class="notice-body"><ul>${(n.items||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>`).join('')||'<div class="empty">등록된 안내사항이 없습니다.</div>'}</div></section>`}
 function renderWorkflow(list){return `<section class="section">${sectionHead('PROCESS','작업 진행 순서')}<div class="workflow">${list.map((x,i)=>`<article class="workflow-item card"><div class="workflow-num">${i+1}</div><h3>${esc(x.title)}</h3>${x.description?`<p>${esc(x.description)}</p>`:''}</article>`).join('')||'<div class="empty">등록된 작업 순서가 없습니다.</div>'}</div></section>`}
 function renderAvatars(list){
-  return `<section class="section">${sectionHead('AVATAR LIST','보유 아바타 목록','카테고리 이름과 사진을 한 화면에서 가로형으로 정리해 확인할 수 있습니다.')}<div class="avatar-board">${list.map(a=>avatarGroup(a)).join('')||'<div class="empty">등록된 아바타가 없습니다.</div>'}</div></section>`
+  const photos=[];
+  (list||[]).forEach(a=>(a.images||[]).filter(Boolean).forEach((u,i)=>photos.push({url:u,alt:`${a.name||'아바타'} ${i+1}`})));
+  return `<section class="section">${sectionHead('AVATAR LIST','보유 아바타 목록')}<div class="avatar-wall">${photos.map(x=>`<button type="button" class="avatar-tile" aria-label="${esc(x.alt)} 크게 보기"><img src="${esc(x.url)}" alt="${esc(x.alt)}" loading="lazy" decoding="async" data-zoom="true"></button>`).join('')||'<div class="empty">등록된 아바타가 없습니다.</div>'}</div></section>`;
 }
-function avatarGroup(a){
-  const images=(a.images||[]).filter(Boolean);
-  return `<div class="avatar-group"><div class="avatar-category">${esc(a.name||'아바타')}</div><div class="avatar-photo-line">${images.map((u,i)=>`<div class="avatar-thumb">${img(u,`${a.name} ${i+1}`,'avatar-thumb-img')}</div>`).join('')||'<div class="avatar-empty">등록된 사진이 없습니다.</div>'}</div></div>`;
+function premadeCard(p){
+  return `<article class="premade-card card"><div class="premade-top"><div class="premade-media">${img(p.faceImage,`${p.name} 얼굴`)}</div><div class="premade-media">${img(p.motionGif,`${p.name} 움직임`)}</div></div><div class="premade-meta"><div class="premade-name-row"><div><h3 class="premade-name">${esc(p.name)}</h3><div class="premade-base">${esc(p.baseModel||'')}</div></div><div class="price">${esc(p.price||'')}</div></div><p class="premade-desc">${esc(p.description||'')}</p><div class="chips">${(p.included||[]).map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div></div></article>`;
 }
-function renderPremades(list){return `<section class="section">${sectionHead('READY-MADE','현재 판매중인 개인작','빠르게 아바타를 받고 싶은 분들을 위한 1인 한정 개인작입니다.')}<div class="premade-grid">${list.map(p=>`<article class="premade-card card"><div class="premade-top"><div class="premade-media">${img(p.faceImage,`${p.name} 얼굴`)}</div><div class="premade-media">${img(p.motionGif,`${p.name} 움직임`)}</div></div><div class="premade-meta"><div class="premade-name-row"><div><h3 class="premade-name">${esc(p.name)}</h3><div class="premade-base">${esc(p.baseModel||'')}</div></div><div class="price">${esc(p.price||'')}</div></div><p class="premade-desc">${esc(p.description||'')}</p><div class="chips">${(p.included||[]).map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div></div></article>`).join('')||'<div class="empty">현재 판매중인 개인작이 없습니다.</div>'}</div></section>`}
+function renderPremades(list){
+  const items=(list||[]);
+  const head=sectionHead('READY-MADE','현재 판매중인 개인작','빠르게 아바타를 받고 싶은 분들을 위한 1인 한정 개인작입니다.');
+  if(!items.length)return `<section class="section">${head}<div class="empty">현재 판매중인 개인작이 없습니다.</div></section>`;
+  if(items.length<3)return `<section class="section">${head}<div class="premade-grid">${items.map(premadeCard).join('')}</div></section>`;
+  return `<section class="section">${head}<div class="tabs premade-tabs" data-tabs="premade">${items.map((p,i)=>`<button class="tab-btn ${i===0?'active':''}" data-premade-tab="${i}">${esc(p.name||`개인작 ${String.fromCharCode(65+i)}`)}</button>`).join('')}</div><div id="premadePanel" class="premade-tab-panel">${premadeCard(items[0])}</div></section>`;
+}
 function renderPortfolio(list){const first=list[0];return `<section class="section">${sectionHead('PORTFOLIO','포트폴리오','카테고리를 선택한 뒤 아래 슬라이드 바를 움직여 더 많은 작업물을 확인할 수 있습니다.')}<div class="tabs" data-tabs="portfolio">${list.map((a,i)=>`<button class="tab-btn ${i===0?'active':''}" data-tab="${i}">${esc(a.name)}</button>`).join('')}</div><div id="portfolioPanel" class="portfolio-wrap">${first?portfolioPanel(first):'<div class="empty">등록된 포트폴리오가 없습니다.</div>'}</div></section>`}
 function newestPortfolioItems(cat){
   return (cat.items||[]).map((item,index)=>({item,index,stamp:Number(item.updatedAt||item.createdAt||0)})).sort((a,b)=>{
@@ -72,6 +79,18 @@ function renderInquiry(q){
   const options=(q.items||[]).filter(x=>x.enabled!==false);
   return `<section class="section" id="inquiry">${sectionHead('APPLICATION','신청 양식',q.intro||'')}<div class="inquiry-card card"><form id="inquiryForm" class="form-grid"><div class="field full"><label for="applicationType">신청항목</label><select id="applicationType" name="신청항목">${options.map(x=>`<option value="${esc(x.id)}">${esc(x.label)}</option>`).join('')}</select></div><div id="dynamicInquiry" class="field full"></div></form><div class="copy-row"><button type="button" class="btn primary" id="copyInquiry">문의 양식 복사하기</button></div></div></section>`
 }
+function bindPremadeTabs(){
+  const tabs=document.querySelector('[data-tabs="premade"]');
+  if(!tabs)return;
+  tabs.addEventListener('click',e=>{
+    const b=e.target.closest('[data-premade-tab]');
+    if(!b)return;
+    [...tabs.children].forEach(x=>x.classList.toggle('active',x===b));
+    const item=(content.premades||[])[Number(b.dataset.premadeTab)];
+    const panel=document.querySelector('#premadePanel');
+    if(panel&&item)panel.innerHTML=premadeCard(item);
+  });
+}
 function bindTabs(){
   $('[data-tabs="portfolio"]')?.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return; [...b.parentNode.children].forEach(x=>x.classList.toggle('active',x===b)); $('#portfolioPanel').innerHTML=portfolioPanel(content.portfolioCategories[+b.dataset.tab]);bindPortfolioSlider();bindLightbox();});
 }
@@ -82,23 +101,32 @@ function bindPortfolioSlider(){
     if(!rail||!range)return;
     let syncing=false;
     const updateRange=()=>{
-      const max=Math.max(0,Math.round(rail.scrollWidth-rail.clientWidth));
-      range.max=String(max);
-      range.value=String(Math.min(max,Math.round(rail.scrollLeft)));
+      const max=Math.max(0,rail.scrollWidth-rail.clientWidth);
+      const trackWidth=Math.max(1,range.clientWidth||shell.clientWidth);
+      const visibleRatio=rail.scrollWidth>0?Math.min(1,rail.clientWidth/rail.scrollWidth):1;
+      const thumb=Math.max(64,Math.min(trackWidth,Math.round(trackWidth*visibleRatio)));
+      range.style.setProperty('--portfolio-thumb-size',`${thumb}px`);
+      range.max=String(Math.max(1,Math.round(max)));
+      range.value=String(Math.min(max,rail.scrollLeft));
       range.parentElement.hidden=max<=1;
     };
     range.addEventListener('input',()=>{
       syncing=true;
-      rail.scrollLeft=Number(range.value)||0;
+      const max=Math.max(0,rail.scrollWidth-rail.clientWidth);
+      const rangeMax=Math.max(1,Number(range.max)||1);
+      rail.scrollLeft=(Number(range.value)||0)/rangeMax*max;
       requestAnimationFrame(()=>{syncing=false;});
     });
     rail.addEventListener('scroll',()=>{
       if(syncing)return;
-      range.value=String(Math.round(rail.scrollLeft));
+      const max=Math.max(0,rail.scrollWidth-rail.clientWidth);
+      const rangeMax=Math.max(1,Number(range.max)||1);
+      range.value=String(max>0?(rail.scrollLeft/max)*rangeMax:0);
     },{passive:true});
     if('ResizeObserver' in window){
       const ro=new ResizeObserver(updateRange);
       ro.observe(rail);
+      ro.observe(range);
       Array.from(rail.children).forEach(el=>ro.observe(el));
     }else{
       window.addEventListener('resize',updateRange,{passive:true});
