@@ -2,7 +2,7 @@ const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>[...r.query
 const esc=(v='')=>String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const uid=()=>crypto.randomUUID?.()||Math.random().toString(36).slice(2);
 const toast=msg=>{const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>el.classList.remove('show'),2200)};
-let data=null, tab='site', storageWarning='', storageInfo=null;
+let data=null, tab='site', storageWarning='', storageInfo=null, githubDiag=null;
 const tabs=[['site','작가 소개'],['notices','안내사항'],['workflow','진행 순서'],['avatars','아바타'],['premades','개인작'],['portfolioCategories','포트폴리오'],['collaborators','협업 작가'],['inquiry','신청 양식']];
 async function api(url,opt={}){const r=await fetch(url,{...opt,headers:{...(opt.headers||{})}});let j={};try{j=await r.json()}catch{};if(!r.ok)throw new Error([j.error||`요청 실패 (${r.status})`,j.detail].filter(Boolean).join(' — '));return j}
 async function loadDefault(){return fetch('/data/default.json',{cache:'no-store'}).then(r=>r.json())}
@@ -41,6 +41,7 @@ async function uploadFile(inp){const file=inp.files?.[0];if(!file)return;const p
 async function save(){capture();try{const j=await api('/api/content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});storageWarning='';storageInfo=j.storage||storageInfo;showStorageStatus();toast('GitHub에 저장했습니다.')}catch(e){toast(e.message)}}
 $('#loginForm').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#loginMessage');msg.textContent='로그인 중...';try{await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('#adminPassword').value})});msg.textContent='';await startEditor()}catch(err){msg.textContent=err.message}});
 $('#saveAll').onclick=save;$('#saveAllBottom').onclick=save;$('#logout').onclick=async()=>{await api('/api/logout',{method:'POST'}).catch(()=>{});location.reload()};
-function showStorageStatus(){const el=$('#storageStatus');if(!el)return;if(storageWarning){el.hidden=false;el.innerHTML=`<b>GitHub 저장소 확인 필요</b><br>${esc(storageWarning)}`;return}if(storageInfo){el.hidden=false;el.innerHTML=`<b>GitHub 저장소 연결됨</b><br>${esc(storageInfo.owner)}/${esc(storageInfo.repo)} · ${esc(storageInfo.branch)} · ${esc(storageInfo.path)}`;return}el.hidden=true}
-async function startEditor(){await loadData();$('#loginPanel').hidden=true;$('#editorPanel').hidden=false;renderTabs();renderEditor();showStorageStatus()}
+async function diagnoseGitHub(){try{githubDiag=await api('/api/github-status',{cache:'no-store'});storageWarning='';storageInfo={owner:githubDiag.owner,repo:githubDiag.repo,branch:githubDiag.branch,path:githubDiag.contentPath,userLogin:githubDiag.userLogin}}catch(e){storageWarning=e.message;githubDiag=null}}
+function showStorageStatus(){const el=$('#storageStatus');if(!el)return;if(storageWarning){el.hidden=false;el.innerHTML=`<b>GitHub 저장소 확인 필요</b><br>${esc(storageWarning)}<br><span style="font-size:.88em">404라면 GITHUB_OWNER / GITHUB_REPO 오타 또는 토큰의 Repository access에서 콘텐츠 저장소가 빠진 경우가 가장 흔합니다.</span>`;return}if(storageInfo){el.hidden=false;el.innerHTML=`<b>GitHub 저장소 연결됨</b><br>${esc(storageInfo.owner)}/${esc(storageInfo.repo)} · ${esc(storageInfo.branch)} · ${esc(storageInfo.path)}${storageInfo.userLogin?`<br><span style="font-size:.88em">토큰 사용자: ${esc(storageInfo.userLogin)}</span>`:''}`;return}el.hidden=true}
+async function startEditor(){await Promise.all([loadData(),diagnoseGitHub()]);$('#loginPanel').hidden=true;$('#editorPanel').hidden=false;renderTabs();renderEditor();showStorageStatus()}
 if(await checkSession()) await startEditor();

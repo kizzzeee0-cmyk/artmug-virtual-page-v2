@@ -1,11 +1,11 @@
 import {isAdmin,json} from './_auth.js';
-import {githubConfig,getRawFile,putFile,textToBase64} from './_github.js';
+import {githubConfig,getRawFile,putFile,textToBase64,resolveGitHubConfig} from './_github.js';
 
 function cacheKey(request){return new Request(new URL('/api/content',request.url).toString(),{method:'GET'});}
 
 export async function onRequestGet(context){
   const {request,env}=context;
-  const cfg=githubConfig(env);
+  let cfg=githubConfig(env);
   if(cfg.missing.length){
     return json({content:null,warning:`GitHub 저장소 설정이 없습니다: ${cfg.missing.join(', ')}`});
   }
@@ -30,8 +30,9 @@ export async function onRequestGet(context){
 export async function onRequestPost(context){
   const {request,env}=context;
   if(!(await isAdmin(request,env)))return json({error:'관리자 로그인이 필요합니다.'},401);
-  const cfg=githubConfig(env);
+  let cfg=githubConfig(env);
   if(cfg.missing.length)return json({error:`Cloudflare에 ${cfg.missing.join(', ')} 값을 먼저 등록해주세요.`},503);
+  try{cfg=await resolveGitHubConfig(cfg)}catch(e){return json({error:'GitHub 저장소 연결 설정을 확인해주세요.',detail:e.message},e.status===401?401:502)}
   let body;try{body=await request.json()}catch{return json({error:'JSON 형식이 올바르지 않습니다.'},400)}
   if(!body||typeof body!=='object'||Array.isArray(body))return json({error:'저장할 데이터가 없습니다.'},400);
   const text=JSON.stringify(body,null,2);

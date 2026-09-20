@@ -1,8 +1,12 @@
 {
-  "name":"artmug-artist-page-v2-github-storage",
-  "version":"2.0.0",
-  "private":true,
-  "type":"module",
-  "scripts":{"dev":"wrangler pages dev public"},
-  "devDependencies":{"wrangler":"^4.0.0"}
+  "name": "artmug-artist-page-v2-1-github-storage",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
 }

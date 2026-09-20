@@ -1,5 +1,5 @@
 import {isAdmin,json} from './_auth.js';
-import {arrayBufferToBase64,cleanPath,githubConfig,putFile} from './_github.js';
+import {arrayBufferToBase64,cleanPath,githubConfig,putFile,resolveGitHubConfig} from './_github.js';
 
 const types=new Map([
   ['image/png','png'],['image/jpeg','jpg'],['image/webp','webp'],['image/gif','gif']
@@ -7,8 +7,9 @@ const types=new Map([
 
 export async function onRequestPost({request,env}){
   if(!(await isAdmin(request,env)))return json({error:'관리자 로그인이 필요합니다.'},401);
-  const cfg=githubConfig(env);
+  let cfg=githubConfig(env);
   if(cfg.missing.length)return json({error:`Cloudflare에 ${cfg.missing.join(', ')} 값을 먼저 등록해주세요.`},503);
+  try{cfg=await resolveGitHubConfig(cfg)}catch(e){return json({error:'GitHub 저장소 연결 설정을 확인해주세요.',detail:e.message},e.status===401?401:502)}
   let form;try{form=await request.formData()}catch{return json({error:'업로드 요청을 읽지 못했습니다.'},400)}
   const file=form.get('file');
   if(!(file instanceof File))return json({error:'파일이 없습니다.'},400);

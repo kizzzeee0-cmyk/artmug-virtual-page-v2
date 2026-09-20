@@ -452,3 +452,17 @@ ADMIN_SESSION_SECRET
 Cloudflare **Variables and Secrets**에서 Secret으로 관리하세요.
 
 브라우저에서 실행되는 `public/assets/*.js`에는 GitHub Token이 들어있지 않습니다. 모든 GitHub 쓰기 작업은 `/functions`의 서버 측 코드에서 처리합니다.
+
+
+## v2.1 - 사진 업로드에서 404 Not Found가 뜰 때
+
+관리자에서 `GitHub 요청 실패 (404): Not Found`가 뜨는 경우 파일 형식 문제가 아니라 **GitHub 저장소 접근 설정** 문제인 경우가 대부분입니다.
+
+1. Cloudflare의 `GITHUB_OWNER`가 GitHub 사용자명과 정확히 같은지 확인합니다.
+2. `GITHUB_REPO`가 코드 저장소가 아니라 콘텐츠 저장소(예: `artmug-content`) 이름인지 확인합니다.
+3. GitHub Fine-grained token의 **Repository access → Only select repositories**에서 콘텐츠 저장소가 선택되어 있는지 확인합니다.
+4. **Repository permissions → Contents → Read and write**인지 확인합니다.
+5. 토큰을 다시 만들었다면 Cloudflare `GITHUB_TOKEN` 값을 새 토큰으로 교체하고 새 배포를 실행합니다.
+6. `GITHUB_BRANCH`는 삭제하거나 비워두는 것을 권장합니다. v2.1부터 저장소의 실제 default branch를 자동으로 감지합니다.
+
+관리자 로그인 후 상단의 GitHub 연결 상태가 `GitHub 저장소 연결됨`으로 표시되면 업로드 준비가 된 상태입니다.
