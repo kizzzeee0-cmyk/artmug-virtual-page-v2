@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Artist Page Admin</title>
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body>
+  <main class="admin-shell" id="adminApp">
+    <section class="admin-login card" id="loginPanel">
+      <div class="eyebrow">ARTIST PAGE ADMIN</div>
+      <h1>관리자 로그인</h1>
+      <p class="muted">Cloudflare 환경 변수에 등록한 관리자 비밀번호를 입력하세요.</p>
+      <form id="loginForm" class="stack-form">
+        <label>관리자 비밀번호<input id="adminPassword" type="password" autocomplete="current-password" required /></label>
+        <button class="btn primary" type="submit">로그인</button>
+      </form>
+      <p class="form-message" id="loginMessage"></p>
+    </section>
+    <section id="editorPanel" hidden>
+      <header class="admin-topbar">
+        <div><div class="eyebrow">ARTIST PAGE ADMIN</div><h1>페이지 관리</h1></div>
+        <div class="admin-actions"><a class="btn ghost" href="/" target="_blank" rel="noopener">페이지 보기</a><button id="saveAll" class="btn primary">전체 저장</button><button id="logout" class="btn ghost">로그아웃</button></div>
+      </header>
+      <div class="admin-hint" id="storageStatus" hidden></div>
+      <nav class="admin-tabs" id="adminTabs" aria-label="관리 메뉴"></nav>
+      <div class="admin-editor card" id="adminEditor"></div>
+      <div class="admin-bottom-save"><button id="saveAllBottom" class="btn primary">전체 저장</button></div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/assets/admin.js"></script>
+</body>
+</html>
