@@ -1,3 +1,15 @@
+## v2.7
+- 개인작 얼굴/GIF 이미지 영역을 PC에서 조금 더 작게 표시하도록 최대 폭을 조정했습니다.
+- 포트폴리오 카테고리마다 '작업물 이름 표시' ON/OFF 옵션을 추가했습니다.
+- 각 포트폴리오 작업물에 작은 이름을 입력할 수 있고, ON인 카테고리에서만 이미지/GIF 아래에 표시됩니다.
+- 기존 caption 데이터는 그대로 작업물 이름으로 호환됩니다.
+
+## v2.6
+- Restored avatar names as a single top category/label row.
+- Removed per-photo/group name captions: all avatar photos remain in one dense wrapping wall.
+- Added the notice: "목록에 없는 아바타는 기프트(선물)로 보내주셔야 작업이 가능합니다."
+- Added avatar section subtitle for currently supported owned avatars.
+
 ## v2.5
 - Avatar list now renders as one dense continuous photo wall with no category-name labels or count labels.
 - Avatar thumbnails wrap automatically to the next row with minimal spacing.

@@ -10,29 +10,112 @@
     "cream": "#FFFDE5"
   },
   "notices": [
-    {"id":"notice-basic","title":"기본 안내사항","items":["작업 전 안내사항을 반드시 확인해주세요.","작업 범위와 일정은 상담 내용에 따라 달라질 수 있습니다."]},
-    {"id":"notice-pay","title":"결제 및 진행 순서","items":["상담 → 작업 범위 확인 → 결제 → 작업 진행 순서로 진행됩니다."]},
-    {"id":"notice-booth","title":"BOOTH 이용 관련 안내","items":["필요 에셋의 구매 여부와 사용 범위를 미리 확인해주세요."]},
-    {"id":"notice-revision","title":"작업 진행 및 수정 규정","items":["중간 확인 단계에서 수정 요청을 전달해주세요."]}
+    {
+      "id": "notice-basic",
+      "title": "기본 안내사항",
+      "items": [
+        "작업 전 안내사항을 반드시 확인해주세요.",
+        "작업 범위와 일정은 상담 내용에 따라 달라질 수 있습니다."
+      ]
+    },
+    {
+      "id": "notice-pay",
+      "title": "결제 및 진행 순서",
+      "items": [
+        "상담 → 작업 범위 확인 → 결제 → 작업 진행 순서로 진행됩니다."
+      ]
+    },
+    {
+      "id": "notice-booth",
+      "title": "BOOTH 이용 관련 안내",
+      "items": [
+        "필요 에셋의 구매 여부와 사용 범위를 미리 확인해주세요."
+      ]
+    },
+    {
+      "id": "notice-revision",
+      "title": "작업 진행 및 수정 규정",
+      "items": [
+        "중간 확인 단계에서 수정 요청을 전달해주세요."
+      ]
+    }
   ],
   "workflow": [
-    {"title":"문의 및 상담","description":"신청 양식을 복사해 문의로 보내주세요."},
-    {"title":"작업 범위 확인","description":"필요 파일과 옵션을 함께 확인합니다."},
-    {"title":"작업 진행","description":"중간 확인이 필요한 작업은 진행 상황을 공유합니다."},
-    {"title":"최종 확인 및 전달","description":"최종 확인 후 작업물을 전달합니다."}
+    {
+      "title": "문의 및 상담",
+      "description": "신청 양식을 복사해 문의로 보내주세요."
+    },
+    {
+      "title": "작업 범위 확인",
+      "description": "필요 파일과 옵션을 함께 확인합니다."
+    },
+    {
+      "title": "작업 진행",
+      "description": "중간 확인이 필요한 작업은 진행 상황을 공유합니다."
+    },
+    {
+      "title": "최종 확인 및 전달",
+      "description": "최종 확인 후 작업물을 전달합니다."
+    }
   ],
   "avatars": [
-    {"name":"Avatar A","images":[]},
-    {"name":"Avatar B","images":[]}
+    {
+      "name": "Avatar A",
+      "images": []
+    },
+    {
+      "name": "Avatar B",
+      "images": []
+    }
   ],
   "premades": [
-    {"id":"premade-a","name":"개인작 A","baseModel":"기존 모델 이름","price":"₩0,000","description":"아바타를 빠르게 받고 싶으신 분들에게 추천합니다. 1인 한정 판매입니다.","faceImage":"","motionGif":"","included":["성형","기본 페이셜 세팅"]}
+    {
+      "id": "premade-a",
+      "name": "개인작 A",
+      "baseModel": "기존 모델 이름",
+      "price": "₩0,000",
+      "description": "아바타를 빠르게 받고 싶으신 분들에게 추천합니다. 1인 한정 판매입니다.",
+      "faceImage": "",
+      "motionGif": "",
+      "included": [
+        "성형",
+        "기본 페이셜 세팅"
+      ]
+    }
   ],
   "portfolioCategories": [
-    {"id":"sculpt","name":"성형","layout":"compare","ratio":"1 / 1","items":[]},
-    {"id":"facial","name":"페이셜","layout":"gif","ratio":"1 / 1","items":[]},
-    {"id":"bounce","name":"뽀잉눈","layout":"gif","ratio":"1 / 1","items":[]},
-    {"id":"nilotoon","name":"닐로툰","layout":"wide","ratio":"16 / 9","items":[]}
+    {
+      "id": "sculpt",
+      "name": "성형",
+      "layout": "compare",
+      "ratio": "1 / 1",
+      "items": [],
+      "showCaption": true
+    },
+    {
+      "id": "facial",
+      "name": "페이셜",
+      "layout": "gif",
+      "ratio": "1 / 1",
+      "items": [],
+      "showCaption": true
+    },
+    {
+      "id": "bounce",
+      "name": "뽀잉눈",
+      "layout": "gif",
+      "ratio": "1 / 1",
+      "items": [],
+      "showCaption": true
+    },
+    {
+      "id": "nilotoon",
+      "name": "닐로툰",
+      "layout": "wide",
+      "ratio": "16 / 9",
+      "items": [],
+      "showCaption": true
+    }
   ],
   "collaborators": {
     "enabled": false,
@@ -41,23 +124,48 @@
   "inquiry": {
     "intro": "아래 내용을 작성한 뒤 ‘문의 양식 복사하기’를 눌러 아트머그 문의란에 붙여넣어 주세요.",
     "items": [
-      {"id":"premade","label":"개인작","preset":"premade","enabled":true},
-      {"id":"warudo","label":"일반 성형 Warudo 패키지","preset":"sculpt","enabled":true},
-      {"id":"vsf","label":"일반 성형 VSF 패키지","preset":"sculpt","enabled":true},
-      {"id":"nilotoon","label":"닐로툰","preset":"nilotoon","enabled":true}
+      {
+        "id": "premade",
+        "label": "개인작",
+        "preset": "premade",
+        "enabled": true
+      },
+      {
+        "id": "warudo",
+        "label": "일반 성형 Warudo 패키지",
+        "preset": "sculpt",
+        "enabled": true
+      },
+      {
+        "id": "vsf",
+        "label": "일반 성형 VSF 패키지",
+        "preset": "sculpt",
+        "enabled": true
+      },
+      {
+        "id": "nilotoon",
+        "label": "닐로툰",
+        "preset": "nilotoon",
+        "enabled": true
+      }
     ],
-    "premadeOptions":["개인작 A","개인작 B","개인작 C","개인작 D"],
-    "fileOptionDescription":"유니티패키지 구매 여부를 확인해주세요. 필요한 파일 형식이 있다면 추가 문의사항에 함께 작성해주세요.",
+    "premadeOptions": [
+      "개인작 A",
+      "개인작 B",
+      "개인작 C",
+      "개인작 D"
+    ],
+    "fileOptionDescription": "유니티패키지 구매 여부를 확인해주세요. 필요한 파일 형식이 있다면 추가 문의사항에 함께 작성해주세요.",
     "placeholders": {
-      "nickname":"예: 칠공",
-      "platform":"예: SOOP / 치지직 / YouTube",
-      "baseAvatar":"예: 마누카 / 모에 / 셀레스티아",
-      "releaseDate":"예: 2026-10-01",
-      "appearance":"원하는 분위기, 눈매, 얼굴형, 참고자료 등을 적어주세요.",
-      "booth":"https://booth.pm/...",
-      "color":"예: 검정 + 보라 포인트",
-      "request":"추가 요청사항을 적어주세요.",
-      "extra":"그 외 문의사항을 자유롭게 적어주세요."
+      "nickname": "예: 칠공",
+      "platform": "예: SOOP / 치지직 / YouTube",
+      "baseAvatar": "예: 마누카 / 모에 / 셀레스티아",
+      "releaseDate": "예: 2026-10-01",
+      "appearance": "원하는 분위기, 눈매, 얼굴형, 참고자료 등을 적어주세요.",
+      "booth": "https://booth.pm/...",
+      "color": "예: 검정 + 보라 포인트",
+      "request": "추가 요청사항을 적어주세요.",
+      "extra": "그 외 문의사항을 자유롭게 적어주세요."
     }
   }
 }

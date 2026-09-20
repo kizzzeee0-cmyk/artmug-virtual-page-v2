@@ -1,3 +1,7 @@
+# Artmug Artist Page v2.7
+
+> v2.7: 개인작 이미지 크기 조정 + 포트폴리오 작업물 이름 표시 ON/OFF 기능 추가.
+
 # Artmug Artist Page v2.4 — GitHub Storage Edition
 
 아트머그 작가 페이지에 iframe으로 넣기 위한 가벼운 반응형 페이지입니다.
