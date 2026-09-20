@@ -1,3 +1,13 @@
+## v2.3
+- 보유 아바타 탭 제거: 모든 아바타 이름과 사진을 한 화면에서 확인하도록 변경
+- 아바타 사진 썸네일 축소 및 전체 이미지 표시
+- 성형 Before/After를 각각 1:1로 고정하고 object-fit: contain으로 잘림 제거
+- 포트폴리오 클릭 확대(lightbox) 추가
+- 포트폴리오 가로 슬라이더 및 이전/다음 버튼 추가
+- 페이셜/뽀잉눈 카드 크기 축소, 닐로툰 16:9 카드 확대
+- 포트폴리오 업로드 시간 기록 및 최신 항목 우선 정렬
+- 협업 작가 이미지 원본 비율 유지 표시
+
 ## v2.2
 - Fix artist intro description rendering so single-line text no longer appears as many forced lines on desktop.
 - Normalize whitespace in artist description to collapse accidental newlines into spaces.
